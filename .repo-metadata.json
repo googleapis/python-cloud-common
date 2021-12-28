@@ -9,6 +9,5 @@
     "repo": "googleapis/python-cloud-common",
     "distribution_name": "google-cloud-common",
     "default_version": "",
-    "codeowner_team": "",
-    "api_shortname": "common"
+    "codeowner_team": ""
 }
