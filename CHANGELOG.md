@@ -8,7 +8,7 @@
 * **deps:** drop dependency packaging ([170234d](https://github.com/googleapis/python-cloud-common/commit/170234db68e087ecbcd5ff22176635e397c11f9a))
 * **deps:** require protobuf <4.0.0dev ([#58](https://github.com/googleapis/python-cloud-common/issues/58)) ([170234d](https://github.com/googleapis/python-cloud-common/commit/170234db68e087ecbcd5ff22176635e397c11f9a))
 
-### [1.0.1](https://github.com/googleapis/python-cloud-common/compare/v1.0.0...v1.0.1) (2022-03-05)
+## [1.0.1](https://github.com/googleapis/python-cloud-common/compare/v1.0.0...v1.0.1) (2022-03-05)
 
 
 ### Bug Fixes
