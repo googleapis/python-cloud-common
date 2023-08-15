@@ -19,27 +19,24 @@ import shutil
 import synthtool as s
 import synthtool.gcp as gcp
 from synthtool.languages import python
-from synthtool import _tracked_paths
 
 # ----------------------------------------------------------------------------
 # Copy the generated client from the owl-bot staging directory
 # ----------------------------------------------------------------------------
-staging = Path("owl-bot-staging")
 
-if staging.is_dir():
-    _tracked_paths.add(staging)
+clean_up_generated_samples = True
 
-    # Remove once this repository migrates to google-cloud-python
-    s.replace(
-        staging / "setup.py",
-        """url = \"https://github.com/googleapis/python-common\"""",
-        """url = \"https://github.com/googleapis/python-cloud-common\"""",
-    )
+# Load the default version defined in .repo-metadata.json.
+default_version = json.load(open(".repo-metadata.json", "rt")).get(
+    "default_version"
+)
 
-    s.copy([staging], excludes=["**/gapic_version.py", "README.rst", "docs/index.rst"])
-
+for library in s.get_staging_dirs(default_version):
+    if clean_up_generated_samples:
+        shutil.rmtree("samples/generated_samples", ignore_errors=True)
+        clean_up_generated_samples = False
+    s.move([library], excludes=["**/gapic_version.py"])
 s.remove_staging_dirs()
-
 
 # ----------------------------------------------------------------------------
 # Add templated files
@@ -50,11 +47,10 @@ templated_files = gcp.CommonTemplates().py_library(
     microgenerator=True,
     versions=gcp.common.detect_versions(path="./google", default_first=True),
 )
-s.move(templated_files, excludes=[".coveragerc", ".github/release-please.yml", "docs/index.rst", "README.rst"])
+s.move(templated_files, excludes=[".coveragerc", ".github/release-please.yml"])
 
 python.py_samples(skip_readmes=True)
 
 # run format session for all directories which have a noxfile
 for noxfile in Path(".").glob("**/noxfile.py"):
     s.shell.run(["nox", "-s", "format"], cwd=noxfile.parent, hide_output=False)
-
